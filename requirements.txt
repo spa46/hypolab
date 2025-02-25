@@ -1,4 +1,5 @@
-django
-djangorestframework
-djangorestframework-simplejwt
-mysqlclient
+flask
+flask_sqlalchemy
+flask_bcrypt
+flask_jwt_extended
+mysql-connector-python
