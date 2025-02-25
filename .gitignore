@@ -1,1 +1,15 @@
+# Node modules
 **/__pycache__/*
+**/node_modules/*
+
+# Build output
+build/
+dist/
+
+
+
+# Logs
+*.log
+
+# Environments
+.env
