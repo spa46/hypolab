@@ -7,6 +7,9 @@ import ClusterStatusPage from './pages/clusters/ClusterStatusPage';
 import ClusterControlPage from './pages/clusters/ClusterControlPage';
 import ClusterMonitorPage from './pages/clusters/ClusterMonitorPage';
 
+import NotFoundPage from './pages/NotFoundPage';
+
+
 const App = () => {
   return (
     <Router>
