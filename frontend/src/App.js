@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import UserRegisterPage from './pages/UserRegisterPage';
-import UserLoginPage from './pages/UserLoginPage';
+import UserRegisterPage from './pages/users/UserRegisterPage';
+import UserLoginPage from './pages/users/UserLoginPage';
 import ClusterRegisterPage from './pages/clusters/ClusterRegisterPage';
 import ClusterStatusPage from './pages/clusters/ClusterStatusPage';
 import ClusterControlPage from './pages/clusters/ClusterControlPage';

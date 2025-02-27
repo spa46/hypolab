@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const RegisterPage = () => {
+const UserRegisterPage = () => {
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Add registration handling logic here
-    console.log('Registration information:', { username, email, password });
+    try {
+      await axios.post('/api/register/', { username, email, password });
+      alert(t('Registration successful'));
+    } catch (error) {
+      alert(t('Failed to register'));
+    }
   };
 
   return (
@@ -20,7 +25,7 @@ const RegisterPage = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           {t('Register')}
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleRegister}>
           <TextField
             label={t('Username')}
             type="text"
@@ -58,5 +63,3 @@ const RegisterPage = () => {
     </Container>
   );
 };
-
-export default RegisterPage;

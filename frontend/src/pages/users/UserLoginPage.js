@@ -1,16 +1,23 @@
+
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const LoginPage = () => {
+const UserLoginPage = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add login handling logic here
-    console.log('Login information:', { email, password });
+    try {
+      const response = await axios.post('/api/token/', { email, password });
+      localStorage.setItem('token', response.data.access);
+      alert(t('Login successful'));
+    } catch (error) {
+      alert(t('Failed to login'));
+    }
   };
 
   return (
@@ -48,5 +55,3 @@ const LoginPage = () => {
     </Container>
   );
 };
-
-export default LoginPage;
