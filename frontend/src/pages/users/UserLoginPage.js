@@ -55,3 +55,5 @@ const UserLoginPage = () => {
     </Container>
   );
 };
+
+export default UserLoginPage;

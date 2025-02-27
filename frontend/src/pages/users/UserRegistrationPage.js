@@ -3,7 +3,7 @@ import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const UserRegisterPage = () => {
+const UserRegistrationPage = () => {
   const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -63,3 +63,5 @@ const UserRegisterPage = () => {
     </Container>
   );
 };
+
+export default UserRegistrationPage;
