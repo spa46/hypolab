@@ -3,7 +3,6 @@ from django.urls import path
 from .views import RegisterHypoClusterView, HypoClusterStatusView, ControlHypoClusterView, MonitorHypoClusterView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('register/', RegisterHypoClusterView.as_view(), name='register_hypo_cluster'),
     path('status/', HypoClusterStatusView.as_view(), name='status_hypo_cluster'),
     path('control/<int:pk>/', ControlHypoClusterView.as_view(), name='control_hypo_cluster'),
