@@ -6,10 +6,9 @@
 build/
 dist/
 
-
-
 # Logs
 *.log
 
 # Environments
-.env
+i.env
+.idea
