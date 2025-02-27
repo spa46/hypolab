@@ -1,17 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import UserRegisterPage from './pages/UserRegisterPage';
+import UserLoginPage from './pages/UserLoginPage';
+import ClusterRegisterPage from './pages/clusters/ClusterRegisterPage';
+import ClusterStatusPage from './pages/clusters/ClusterStatusPage';
+import ClusterControlPage from './pages/clusters/ClusterControlPage';
+import ClusterMonitorPage from './pages/clusters/ClusterMonitorPage';
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Routes>
+      <Switch>
+        <Route path="/user/register" component={UserRegisterPage} />
+        <Route path="/user/login" component={UserLoginPage} />
+        <Route path="/clusters/register" component={ClusterRegisterPage} />
+        <Route path="/clusters/status" component={ClusterStatusPage} />
+        <Route path="/clusters/control" component={ClusterControlPage} />
+        <Route path="/clusters/monitor" component={ClusterMonitorPage} />
+      </Switch>
     </Router>
   );
-}
+};
 
 export default App;
