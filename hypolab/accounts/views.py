@@ -12,15 +12,10 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'register.html')
-
 class LoginView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'login.html')
 
 class LogoutView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
