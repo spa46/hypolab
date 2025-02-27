@@ -1,9 +1,7 @@
-# hypo/views.py
 from rest_framework import generics
-from django.http import JsonResponse
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
-from .kafka_utils import get_kafka_producer, get_kafka_consumer, send_message, consume_messages
+from .kafka_utils import get_kafka_producer, send_message
 
 
 class RegisterHypoClusterView(generics.CreateAPIView):
