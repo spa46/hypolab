@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
@@ -10,17 +11,12 @@ const UserLoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email === 'test' && password === 'test') {
-      localStorage.setItem('token', 'mock-token');
+    try {
+      const response = await axios.post('/api/token/', { email, password });
+      localStorage.setItem('token', response.data.access);
       alert(t('Login successful'));
-    } else {
-      try {
-        const response = await axios.post('/api/token/', { email, password });
-        localStorage.setItem('token', response.data.access);
-        alert(t('Login successful'));
-      } catch (error) {
-        alert(t('Failed to login'));
-      }
+    } catch (error) {
+      alert(t('Failed to login'));
     }
   };
 
