@@ -80,12 +80,12 @@ WSGI_APPLICATION = 'hypolab.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'HypoDB',
         'USER': 'test',
         'PASSWORD': 'test1234',
         'HOST': 'localhost',  # Set to 'localhost' or the IP address of your database server
-        'PORT': '3306',  # Default port for MySQL
+        'PORT': '5432',  # Default port for PostgreSQL
     }
 }
 
