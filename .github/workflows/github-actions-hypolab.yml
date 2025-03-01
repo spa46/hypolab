@@ -101,9 +101,9 @@ jobs:
 
     - name: Deploy Django backend (Docker example)
       run: |
-        cd backend
-        docker build -t my-django-backend .
-        docker push my-docker-repo/my-django-backend:latest
+        cd hypolab
+        docker build -t hypolab-backend .
+        docker push hypolab-repo/hypolab-backend:latest
 
   deploy_frontend:
     runs-on: ubuntu-latest
@@ -116,5 +116,5 @@ jobs:
     - name: Deploy React frontend (example using Netlify)
       run: |
         cd frontend
-        npm run build
+        yarn build
         netlify deploy --dir=build --prod
