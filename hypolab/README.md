@@ -1,3 +1,3 @@
 # hypolab
 
-![Backend Build](https://github.com/<your-username>/<your-repo>/actions/workflows/github-actions-hypolab.yml/badge.svg?branch=main&event=push)
+![Backend Build](https://github.com/spa46/hypolab/actions/workflows/github-actions-backend.yml/badge.svg?branch=main&event=push)
