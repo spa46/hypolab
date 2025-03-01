@@ -5,4 +5,8 @@ djangorestframework-simplejwt
 # DB
 psycopg2-binary
 
+# message broker
 confluent-kafka
+
+# test
+pytest

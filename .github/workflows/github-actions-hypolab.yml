@@ -32,7 +32,7 @@ jobs:
 
     - name: Run Django tests
       run: |
-        cd backend
+        cd hypolab
         pytest
 
   frontend_build:
