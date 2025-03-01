@@ -1,0 +1,56 @@
+name: HypoLab Frontend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  frontend_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js for React
+      uses: actions/setup-node@v4
+      with:
+        node-version: '16'
+
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Install React dependencies
+      run: |
+        cd frontend
+        yarn install
+
+#    - name: Run React tests
+#      run: |
+#        cd frontend
+#        yarn test
+
+    - name: Build React frontend
+      run: |
+        cd frontend
+        yarn build
+
+#  deploy_frontend:
+#    runs-on: ubuntu-latest
+#    needs: frontend_build
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Deploy React frontend (example using Netlify)
+#      run: |
+#        cd frontend
+#        yarn build
+##        netlify deploy --dir=build --prod
