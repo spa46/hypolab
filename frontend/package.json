@@ -6,6 +6,11 @@
   "repository": "https://github.com/spa46/hypolab",
   "author": "seansc.park(spa46)",
   "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "test": "scripts/test",
+    "build": "react-scripts build"
+  },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -19,11 +24,9 @@
     "react-router": "6",
     "react-router-dom": "6",
     "react-scripts": "^5.0.1",
-    "yarn": "^1.22.22"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "test": "react-scripts test"
+    "yarn": "^1.22.22",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/jest-dom": "^5.16.5"
   },
   "browserslist": {
     "production": [

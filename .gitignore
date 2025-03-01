@@ -5,6 +5,7 @@
 # Build output
 build/
 dist/
+frontend/coverage
 
 # Logs
 *.log
