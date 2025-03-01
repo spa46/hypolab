@@ -10,3 +10,4 @@ confluent-kafka
 
 # test
 pytest
+pytest-django
