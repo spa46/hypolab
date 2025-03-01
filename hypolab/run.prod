@@ -1,0 +1,1 @@
+export DJANGO_SETTINGS_MODULE=hypolab.settings.production; python manage.py runserver
