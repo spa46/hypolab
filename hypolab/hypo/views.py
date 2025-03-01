@@ -15,8 +15,10 @@ class InitClusterView(APIView):
         if HypoCluster.objects.filter(id=uuid).exists():
             return Response({"error": "UUID already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"message": "UUID is unique"}, status=status.HTTP_200_OK)
+        # Create a new HypoCluster instance with the provided UUID
+        HypoCluster.objects.create(id=uuid)
 
+        return Response({"message": "Cluster initialized successfully"}, status=status.HTTP_200_OK)
 
 class RegisterHypoClusterView(generics.CreateAPIView):
     queryset = HypoCluster.objects.all()
