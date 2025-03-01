@@ -1,7 +1,21 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
 from .kafka_utils import get_kafka_producer, send_message
+
+
+class InitClusterView(APIView):
+    def post(self, request, *args, **kwargs):
+        uuid = request.data.get('uuid')
+        if not uuid:
+            return Response({"error": "UUID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if HypoCluster.objects.filter(id=uuid).exists():
+            return Response({"error": "UUID already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "UUID is unique"}, status=status.HTTP_200_OK)
 
 
 class RegisterHypoClusterView(generics.CreateAPIView):
