@@ -49,10 +49,10 @@ const AddUserDialog = ({ open, onClose, onAddUser }) => {
           fullWidth
           margin="normal"
           value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
+        <Button onClick={onClose} color="primary">
           Cancel
         </Button>
         <Button onClick={handleAdd} color="primary">
