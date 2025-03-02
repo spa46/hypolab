@@ -1,6 +1,7 @@
 // src/admin/components/AddUserDialog.js
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
+import config from '../../config';
 
 const AddUserDialog = ({ open, onClose, onAddUser }) => {
   const [email, setEmail] = useState('');
@@ -9,8 +10,7 @@ const AddUserDialog = ({ open, onClose, onAddUser }) => {
 
   const handleAdd = () => {
     const newUser = { email, password, nickname };
-    // Send newUser to the API
-    fetch('/api/users', {
+    fetch(`${config.adminUserUrl}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,7 +21,11 @@ const AddUserDialog = ({ open, onClose, onAddUser }) => {
       .then(data => {
         onAddUser(data);
         onClose();
-      });
+        setEmail('');
+        setPassword('');
+        setNickname('');
+      })
+      .catch(error => console.error('Error adding user:', error));
   };
 
   return (
@@ -44,11 +48,11 @@ const AddUserDialog = ({ open, onClose, onAddUser }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <TextField
           label="Nickname"
           fullWidth
           margin="normal"
           value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
         />
       </DialogContent>
       <DialogActions>

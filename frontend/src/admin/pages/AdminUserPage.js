@@ -1,19 +1,22 @@
-// src/admin/pages/AdminUserPage.js
 import React, { useState, useEffect } from 'react';
 import { Container, TextField, Button } from '@mui/material';
-import AddUserDialog from '../components/AddUserDialog';
 import UserTable from '../components/UserTable';
+import AddUserDialog from '../components/AddUserDialog';
+import EditUserDialog from '../components/EditUserDialog';
+import config from '../../config';
 
 const AdminUserPage = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState('');
-  const [open, setOpen] = useState(false);
+  const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
-    // Fetch users from the API
-    fetch('/api/users')
+    fetch(`${config.adminUserUrl}`)
       .then(response => response.json())
-      .then(data => setUsers(data));
+      .then(data => setUsers(data))
+      .catch(error => console.error('Error fetching users:', error));
   }, []);
 
   const handleSearchChange = (event) => {
@@ -22,6 +25,15 @@ const AdminUserPage = () => {
 
   const handleAddUser = (newUser) => {
     setUsers([...users, newUser]);
+  };
+
+  const handleUpdateUser = (updatedUser) => {
+    setUsers(users.map(user => user.id === updatedUser.id ? updatedUser : user));
+  };
+
+  const handleRowClick = (user) => {
+    setSelectedUser(user);
+    setOpenEditDialog(true);
   };
 
   const filteredUsers = users.filter(user =>
@@ -39,11 +51,19 @@ const AdminUserPage = () => {
         value={search}
         onChange={handleSearchChange}
       />
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+      <UserTable users={filteredUsers} onRowClick={handleRowClick} />
+      <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
         Add User
       </Button>
-      <UserTable users={filteredUsers} />
-      <AddUserDialog open={open} onClose={() => setOpen(false)} onAddUser={handleAddUser} />
+      <AddUserDialog open={openAddDialog} onClose={() => setOpenAddDialog(false)} onAddUser={handleAddUser} />
+      {selectedUser && (
+        <EditUserDialog
+          open={openEditDialog}
+          onClose={() => setOpenEditDialog(false)}
+          user={selectedUser}
+          onUpdateUser={handleUpdateUser}
+        />
+      )}
     </Container>
   );
 };

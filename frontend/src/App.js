@@ -8,13 +8,11 @@ import ClusterRegistrationPage from './pages/clusters/ClusterRegistrationPage';
 import ClusterStatusPage from './pages/clusters/ClusterStatusPage';
 import ClusterControlPage from './pages/clusters/ClusterControlPage';
 import ClusterMonitorPage from './pages/clusters/ClusterMonitorPage';
-
 import NotFoundPage from './pages/NotFoundPage';
-
 
 const App = () => {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Routes>
         <Route path="/admin/users" element={<AdminUserPage />} />
         <Route path="/admin/clusters" element={<AdminClusterPage />} />
