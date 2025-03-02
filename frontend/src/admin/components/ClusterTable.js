@@ -1,27 +1,54 @@
 // src/admin/components/ClusterTable.js
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Checkbox, Button } from '@mui/material';
 
-const ClusterTable = ({ clusters }) => {
+const ClusterTable = ({ clusters, onRegister, onToggleActive, onRowClick }) => {
   return (
-    <TableContainer component={Paper} style={{ marginTop: 20 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Cluster ID</TableCell>
-            <TableCell>Status</TableCell>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>ID</TableCell>
+          <TableCell>Name</TableCell>
+          <TableCell>Location</TableCell>
+          <TableCell>Active</TableCell>
+          <TableCell>Register</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {clusters.map((cluster) => (
+          <TableRow key={cluster.id} onClick={() => onRowClick(cluster)}>
+            <TableCell>{cluster.id}</TableCell>
+            <TableCell>{cluster.name}</TableCell>
+            <TableCell>{cluster.location}</TableCell>
+            <TableCell>
+              <Checkbox
+                checked={cluster.is_active}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  onToggleActive(cluster.id);
+                }}
+              />
+            </TableCell>
+            <TableCell>
+              {cluster.is_registered ? (
+                'Registered'
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRegister(cluster.id);
+                  }}
+                >
+                  Register
+                </Button>
+              )}
+            </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {clusters.map((cluster) => (
-            <TableRow key={cluster.id}>
-              <TableCell>{cluster.id}</TableCell>
-              <TableCell>{cluster.status}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 
