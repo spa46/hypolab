@@ -1,4 +1,4 @@
-# hypo/models.py
+# clusters/models.py
 
 from django.db import models
 import uuid

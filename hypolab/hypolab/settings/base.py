@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'accounts',
-    'hypo',
+    'clusters',
 ]
 
 MIDDLEWARE = [

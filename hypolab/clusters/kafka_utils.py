@@ -1,4 +1,4 @@
-# hypo/kafka_utils.py
+# clusters/kafka_utils.py
 from confluent_kafka import Producer, Consumer, KafkaException
 
 def get_kafka_producer():

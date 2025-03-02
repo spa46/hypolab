@@ -1,4 +1,4 @@
-# hypo/serializers.py
+# clusters/serializers.py
 
 from rest_framework import serializers
 from .models import HypoCluster

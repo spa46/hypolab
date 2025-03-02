@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from hypo.models import HypoCluster
+from cluster.models import HypoCluster
 
 @pytest.mark.django_db
 def test_init_cluster_view():
