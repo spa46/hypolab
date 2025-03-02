@@ -1,9 +1,12 @@
 # hypo/urls.py
 from django.urls import path
+from .admin_views import AdminHypoClusterListView as ClusterListView
 from .views import RegisterHypoClusterView, HypoClusterStatusView, ControlHypoClusterView, MonitorHypoClusterView, \
     InitClusterView
 
 urlpatterns = [
+    path('admin/clusters/', ClusterListView.as_view(), name='admin_clusters'),
+
     path('init-cluster/', InitClusterView.as_view(), name='init_cluster'),
     path('register/', RegisterHypoClusterView.as_view(), name='register_hypo_cluster'),
     path('status/', HypoClusterStatusView.as_view(), name='status_hypo_cluster'),

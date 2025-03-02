@@ -17,6 +17,7 @@ class InitClusterView(APIView):
 
         # Create a new HypoCluster instance with the provided UUID
         HypoCluster.objects.create(id=uuid)
+        print('New cluster Joined ...', uuid)
 
         return Response({"message": "Cluster initialized successfully"}, status=status.HTTP_200_OK)
 
