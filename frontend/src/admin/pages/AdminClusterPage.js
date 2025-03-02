@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, TextField } from '@mui/material';
 import ClusterTable from '../components/ClusterTable';
+import config from '../../config';
 
 const AdminClusterPage = () => {
   const [clusters, setClusters] = useState([]);
@@ -9,7 +10,7 @@ const AdminClusterPage = () => {
 
   useEffect(() => {
     // Fetch clusters from the API
-    fetch('http://localhost:8000/api/hypo/admin/clusters/')
+    fetch(`${config.adminClusterUrl}`)
       .then(response => response.json())
       .then(data => setClusters(data));
   }, []);
