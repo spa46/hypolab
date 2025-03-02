@@ -9,7 +9,7 @@ const AdminClusterPage = () => {
 
   useEffect(() => {
     // Fetch clusters from the API
-    fetch('/api/clusters')
+    fetch('http://localhost:8000/api/hypo/admin/clusters/')
       .then(response => response.json())
       .then(data => setClusters(data));
   }, []);
