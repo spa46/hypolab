@@ -6,7 +6,7 @@ from .views import RegisterHypoClusterView, HypoClusterStatusView, ControlHypoCl
 urlpatterns = [
     path('admin/', AdminHypoClusterListView.as_view(), name='admin_clusters'),
     path('init-cluster/', InitClusterView.as_view(), name='init_cluster'),
-    path('register/', RegisterHypoClusterView.as_view(), name='register_cluster'),
+    # path('register/', RegisterHypoClusterView.as_view(), name='register_cluster'),
 
     path('status/', HypoClusterStatusView.as_view(), name='status_cluster'),
     path('control/<int:pk>/', ControlHypoClusterView.as_view(), name='control_cluster'),

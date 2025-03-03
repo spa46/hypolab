@@ -1,8 +1,7 @@
-// src/admin/pages/AdminClusterPage.js
 import React, { useState, useEffect } from 'react';
-import { Container, TextField } from '@mui/material';
+import { Container, TextField, Button } from '@mui/material';
 import ClusterTable from '../components/ClusterTable';
-import EditClusterDialog from '../components/EditClusterDialog'; // Import the EditClusterDialog component
+import EditClusterDialog from '../components/EditClusterDialog';
 import config from '../../config';
 
 const AdminClusterPage = () => {
@@ -12,8 +11,7 @@ const AdminClusterPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch clusters from the API
-    fetch(`${config.adminClusterUrl}`)
+    fetch(`${config.clusterUrl}/admin/`)
       .then(response => response.json())
       .then(data => setClusters(data));
   }, []);
@@ -23,13 +21,12 @@ const AdminClusterPage = () => {
   };
 
   const handleRegister = (id) => {
-    // Handle the register button click
-    fetch(`${config.adminClusterUrl}/register`, {
-      method: 'POST',
+    fetch(`${config.clusterUrl}/init-cluster/`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ uuid: id }),
     })
       .then(response => {
         if (response.status === 200) {
@@ -44,7 +41,6 @@ const AdminClusterPage = () => {
   };
 
   const handleToggleActive = (id) => {
-    // Handle the active checkbox toggle
     setClusters(clusters.map(cluster =>
       cluster.id === id ? { ...cluster, is_active: !cluster.is_active } : cluster
     ));
@@ -64,6 +60,24 @@ const AdminClusterPage = () => {
       cluster.id === updatedCluster.id ? updatedCluster : cluster
     ));
     setIsDialogOpen(false);
+  };
+
+  const handleDelete = (ids) => {
+    fetch(`${config.clusterUrl}/admin/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids }),
+    })
+      .then(response => {
+        if (response.status === 200) {
+          setClusters(clusters.filter(cluster => !ids.includes(cluster.id)));
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting clusters:', error);
+      });
   };
 
   const filteredClusters = clusters.filter(cluster =>
@@ -87,6 +101,7 @@ const AdminClusterPage = () => {
         onRegister={handleRegister}
         onToggleActive={handleToggleActive}
         onRowClick={handleRowClick}
+        onDelete={handleDelete}
       />
       {selectedCluster && (
         <EditClusterDialog
