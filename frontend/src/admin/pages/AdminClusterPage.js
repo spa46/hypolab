@@ -9,6 +9,7 @@ const AdminClusterPage = () => {
   const [search, setSearch] = useState('');
   const [selectedCluster, setSelectedCluster] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [registrationStatus, setRegistrationStatus] = useState({});
 
   useEffect(() => {
     fetch(`${config.clusterUrl}/admin/`)
@@ -33,6 +34,10 @@ const AdminClusterPage = () => {
           setClusters(clusters.map(cluster =>
             cluster.id === id ? { ...cluster, is_registered: true } : cluster
           ));
+          setRegistrationStatus(prevStatus => ({
+            ...prevStatus,
+            [id]: 'Registered'
+          }));
         }
       })
       .catch(error => {
@@ -102,6 +107,7 @@ const AdminClusterPage = () => {
         onToggleActive={handleToggleActive}
         onRowClick={handleRowClick}
         onDelete={handleDelete}
+        registrationStatus={registrationStatus}
       />
       {selectedCluster && (
         <EditClusterDialog

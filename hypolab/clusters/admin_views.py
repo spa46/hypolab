@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
 from .kafka_utils import get_kafka_producer, send_message
+from confluent_kafka.admin import AdminClient, NewTopic
 
 
 class AdminHypoClusterListView(generics.ListAPIView):
@@ -30,6 +31,7 @@ class InitClusterView(APIView):
 
     def put(self, request, *args, **kwargs):
         uuid = request.data.get('uuid')
+
         if not uuid:
             return Response({"error": "UUID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -38,9 +40,17 @@ class InitClusterView(APIView):
             cluster.is_registered = True
             cluster.save()
 
-            # Send Kafka registration message
-            producer = get_kafka_producer()
-            send_message(producer, uuid, 'Cluster registered successfully')
+            # Create Kafka topic
+            admin_client = AdminClient({'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')})
+            topic_list = [NewTopic(topic=f'{uuid}/register', num_partitions=1, replication_factor=1)]
+            fs = admin_client.create_topics(topic_list)
+
+            for topic, f in fs.items():
+                try:
+                    f.result()  # The result itself is None
+                    print(f"Topic {topic} created")
+                except Exception as e:
+                    print(f"Failed to create topic {topic}: {e}")
 
             return Response({"message": "Cluster updated successfully"}, status=status.HTTP_200_OK)
         except HypoCluster.DoesNotExist:

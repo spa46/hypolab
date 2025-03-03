@@ -96,3 +96,5 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'

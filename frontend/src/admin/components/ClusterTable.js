@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox } from '@mui/material';
 
-const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete }) => {
+const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registrationStatus }) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const handleCheckboxChange = (event, id) => {
@@ -43,13 +43,17 @@ const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete }) => {
               <TableCell>{cluster.name}</TableCell>
               <TableCell>{cluster.location}</TableCell>
               <TableCell onClick={(event) => event.stopPropagation()}>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={(event) => { event.stopPropagation(); onRegister(cluster.id); }}
-                >
-                  Register
-                </Button>
+                {cluster.is_registered ? (
+                  <span>{registrationStatus[cluster.id] || 'Registered'}</span>
+                ) : (
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={(event) => { event.stopPropagation(); onRegister(cluster.id); }}
+                  >
+                    Register
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
