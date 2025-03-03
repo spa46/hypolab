@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, TextField, Button } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ClusterTable from '../components/ClusterTable';
 import EditClusterDialog from '../components/EditClusterDialog';
 import config from '../../config';
@@ -22,6 +24,12 @@ const AdminClusterPage = () => {
   };
 
   const handleRegister = (id) => {
+    const cluster = clusters.find(cluster => cluster.id === id);
+    if (!cluster.name) {
+      toast.error('Insert Name');
+      return;
+    }
+
     fetch(`${config.clusterUrl}/init-cluster/`, {
       method: 'PUT',
       headers: {
@@ -117,6 +125,7 @@ const AdminClusterPage = () => {
           onSave={handleSave}
         />
       )}
+      <ToastContainer />
     </Container>
   );
 };

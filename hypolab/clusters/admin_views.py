@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
-from .kafka_utils import get_kafka_producer, send_message
-from confluent_kafka.admin import AdminClient, NewTopic
+from .kafka_utils import get_kafka_producer, send_message, create_kafka_topic
 
 
 class AdminHypoClusterListView(generics.ListAPIView):
@@ -30,6 +29,7 @@ class InitClusterView(APIView):
         return Response({"message": "Cluster initialized successfully"}, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
+
         uuid = request.data.get('uuid')
 
         if not uuid:
@@ -41,17 +41,11 @@ class InitClusterView(APIView):
             cluster.save()
 
             # Create Kafka topic
-            admin_client = AdminClient({'bootstrap.servers': os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')})
-            topic_list = [NewTopic(topic=f'{uuid}/register', num_partitions=1, replication_factor=1)]
-            fs = admin_client.create_topics(topic_list)
+            is_sent = create_kafka_topic(f'{uuid}/register', num_partitions=1, replication_factor=1)
 
-            for topic, f in fs.items():
-                try:
-                    f.result()  # The result itself is None
-                    print(f"Topic {topic} created")
-                except Exception as e:
-                    print(f"Failed to create topic {topic}: {e}")
-
-            return Response({"message": "Cluster updated successfully"}, status=status.HTTP_200_OK)
+            if is_sent:
+                return Response({"message": "Cluster updated successfully"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Cluster not updated"}, status=status.HTTP_400_BAD_REQUEST)
         except HypoCluster.DoesNotExist:
             return Response({"error": "Cluster not found"}, status=status.HTTP_404_NOT_FOUND)

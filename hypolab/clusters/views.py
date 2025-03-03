@@ -11,7 +11,6 @@ class RegisterHypoClusterView(generics.CreateAPIView):
     serializer_class = HypoClusterSerializer
 
     def perform_create(self, serializer):
-        print('!@#')
         instance = serializer.save()
         producer = get_kafka_producer()
         send_message(producer, 'register_hypo_cluster', instance.id)

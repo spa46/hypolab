@@ -97,4 +97,9 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-KAFKA_BOOTSTRAP_SERVERS = 'localhost:9092'
+KAFKA_CONFIG = {
+    'bootstrap.servers': 'localhost:9092',
+    'topic': 'hypolab',
+    'group_id': 'my_group',
+    'auto.offset.reset': 'earliest'
+}
