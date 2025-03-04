@@ -3,9 +3,11 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
 from .kafka_utils import get_kafka_producer, send_message, create_kafka_topic
+from .utils import generate_hashed_id
 
 
 class AdminHypoClusterListView(generics.ListAPIView):
@@ -13,18 +15,19 @@ class AdminHypoClusterListView(generics.ListAPIView):
     serializer_class = HypoClusterSerializer
 
 
+# 생성된 ID 저장 (실제 환경에서는 DB 또는 캐시에 저장 가능)
+generated_ids = set()
+
+
+
+
 class InitClusterView(APIView):
     def post(self, request, *args, **kwargs):
-        uuid = request.data.get('uuid')
-        if not uuid:
-            return Response({"error": "UUID is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        if HypoCluster.objects.filter(id=uuid).exists():
-            return Response({"message": "Cluster already initialized"}, status=status.HTTP_200_OK)
+        _id = generate_hashed_id()
 
         # Create a new HypoCluster instance with the provided UUID
-        HypoCluster.objects.create(id=uuid)
-        print('New cluster Joined ...', uuid)
+        HypoCluster.objects.create(id=_id)
+        print('New cluster Joined ...', id)
 
         return Response({"message": "Cluster initialized successfully"}, status=status.HTTP_200_OK)
 
