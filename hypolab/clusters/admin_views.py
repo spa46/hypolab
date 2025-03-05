@@ -15,21 +15,21 @@ class AdminHypoClusterListView(generics.ListAPIView):
     serializer_class = HypoClusterSerializer
 
 
-# 생성된 ID 저장 (실제 환경에서는 DB 또는 캐시에 저장 가능)
-generated_ids = set()
-
-
-
-
 class InitClusterView(APIView):
     def post(self, request, *args, **kwargs):
-        _id = generate_hashed_id()
+        _id = request.data.get('id')
+        if not _id:
+            _id = generate_hashed_id()
 
         # Create a new HypoCluster instance with the provided UUID
-        HypoCluster.objects.create(id=_id)
-        print('New cluster Joined ...', id)
+        obj, created = HypoCluster.objects.get_or_create(id=_id)
 
-        return Response({"message": "Cluster initialized successfully"}, status=status.HTTP_200_OK)
+        if created:
+            print('New cluster Joined ...', id)
+        else:
+            print('Cluster already exists ...', id)
+
+        return Response({"id": obj.id}, status=status.HTTP_200_OK)
 
     def put(self, request, *args, **kwargs):
 
