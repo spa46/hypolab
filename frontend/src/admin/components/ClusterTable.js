@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Menu, MenuItem } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registrationStatus }) => {
   const [selectedIds, setSelectedIds] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuClusterId, setMenuClusterId] = useState(null);
 
   const handleCheckboxChange = (event, id) => {
     event.stopPropagation();
@@ -18,6 +22,21 @@ const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registration
     setSelectedIds([]);
   };
 
+  const handleMenuOpen = (event, id) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    setMenuClusterId(id);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setMenuClusterId(null);
+  };
+
+  const handleMenuItemClick = (action) => {
+    handleMenuClose();
+  };
+
   return (
     <>
       <Table>
@@ -25,14 +44,13 @@ const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registration
           <TableRow>
             <TableCell>Select</TableCell>
             <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
             <TableCell>Location</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {clusters.map(cluster => (
-            <TableRow key={cluster.id} onClick={() => onRowClick(cluster)}>
+            <TableRow key={cluster.id}>
               <TableCell onClick={(event) => event.stopPropagation()}>
                 <Checkbox
                   checked={selectedIds.includes(cluster.id)}
@@ -40,11 +58,25 @@ const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registration
                 />
               </TableCell>
               <TableCell>{cluster.id}</TableCell>
-              <TableCell>{cluster.name}</TableCell>
               <TableCell>{cluster.location}</TableCell>
               <TableCell onClick={(event) => event.stopPropagation()}>
                 {cluster.is_registered ? (
-                  <span>{registrationStatus[cluster.id] || 'Registered'}</span>
+                  <>
+                    <IconButton onClick={(event) => { event.stopPropagation(); onRowClick(cluster); }}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={(event) => handleMenuOpen(event, cluster.id)}>
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl) && menuClusterId === cluster.id}
+                      onClose={handleMenuClose}
+                    >
+                      <MenuItem onClick={() => handleMenuItemClick('restart')}>Restart</MenuItem>
+                      <MenuItem onClick={() => handleMenuItemClick('status')}>Status</MenuItem>
+                    </Menu>
+                  </>
                 ) : (
                   <Button
                     color="primary"

@@ -24,12 +24,6 @@ const AdminClusterPage = () => {
   };
 
   const handleRegister = (id) => {
-    const cluster = clusters.find(cluster => cluster.id === id);
-    if (!cluster.name) {
-      toast.error('Insert Name');
-      return;
-    }
-
     fetch(`${config.clusterUrl}/init-cluster/`, {
       method: 'PUT',
       headers: {
@@ -95,7 +89,6 @@ const AdminClusterPage = () => {
 
   const filteredClusters = clusters.filter(cluster =>
     cluster.id.toLowerCase().includes(search.toLowerCase()) ||
-    cluster.name.toLowerCase().includes(search.toLowerCase()) ||
     cluster.location.toLowerCase().includes(search.toLowerCase())
   );
 
