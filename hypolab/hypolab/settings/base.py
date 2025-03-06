@@ -97,9 +97,15 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-KAFKA_CONFIG = {
-    'bootstrap.servers': 'localhost:9092',
-    'topic': 'hypolab',
-    'group_id': 'my_group',
-    'auto.offset.reset': 'earliest'
-}
+# KAFKA_CONFIG = {
+#     'bootstrap.servers': 'localhost:9092',
+#     'topic': 'hypolab',
+#     'group_id': 'my_group',
+#     'auto.offset.reset': 'earliest'
+# }
+
+MQTT_SERVER = 'localhost'
+MQTT_PORT = 1883
+MQTT_KEEPALIVE = 60
+MQTT_USER = ''
+MQTT_PASSWORD = ''

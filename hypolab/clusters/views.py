@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
-from .kafka_utils import get_kafka_producer, send_message
+from .mqtt import client as mqtt_client
 
 
 class RegisterHypoClusterView(generics.CreateAPIView):
@@ -12,8 +12,6 @@ class RegisterHypoClusterView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        producer = get_kafka_producer()
-        send_message(producer, 'register_hypo_cluster', instance.id)
 
 
 class HypoClusterStatusView(generics.ListAPIView):
@@ -21,8 +19,6 @@ class HypoClusterStatusView(generics.ListAPIView):
     serializer_class = HypoClusterSerializer
 
     def list(self, request, *args, **kwargs):
-        consumer = get_kafka_consumer('status_group', ['status_hypo_cluster'])
-        consume_messages(consumer)
         return super().list(request, *args, **kwargs)
 
 
@@ -32,8 +28,6 @@ class ControlHypoClusterView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         instance = serializer.save()
-        producer = get_kafka_producer()
-        send_message(producer, 'control_hypo_cluster', instance.id)
 
 
 class MonitorHypoClusterView(generics.RetrieveAPIView):
@@ -41,6 +35,10 @@ class MonitorHypoClusterView(generics.RetrieveAPIView):
     serializer_class = HypoClusterSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        consumer = get_kafka_consumer('monitor_group', ['monitor_hypo_cluster'])
-        consume_messages(consumer)
         return super().retrieve(request, *args, **kwargs)
+
+
+def publish_message(request):
+    request_data = json.loads(request.body)
+    rc, mid = mqtt_client.publish(request_data['topic'], request_data['msg'])
+    return JsonResponse({'code': rc})
