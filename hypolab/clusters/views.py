@@ -1,8 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
+import paho.mqtt.client as mqtt
 from .mqtt import client as mqtt_client
 
 
@@ -14,15 +14,30 @@ class RegisterHypoClusterView(generics.CreateAPIView):
         instance = serializer.save()
 
 
-class HypoClusterStatusView(generics.ListAPIView):
+class ClusterStatusView(generics.RetrieveAPIView):
     queryset = HypoCluster.objects.all()
     serializer_class = HypoClusterSerializer
+    lookup_field = 'id'
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    def retrieve(self, request, *args, **kwargs):
+        cluster_id = kwargs.get('id')
+        topic = f"/dev/{cluster_id}/status"
+        topic = 'abc'
+
+        result = mqtt_client.publish(topic, "Status request received")
+
+        if result.rc != mqtt.MQTT_ERR_SUCCESS:
+            return Response({"error": "Failed to publish MQTT message"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        try:
+            cluster = self.get_object()
+            serializer = self.get_serializer(cluster)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except HypoCluster.DoesNotExist:
+            return Response({"error": "Cluster not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class ControlHypoClusterView(generics.UpdateAPIView):
+class ClusterControlView(generics.UpdateAPIView):
     queryset = HypoCluster.objects.all()
     serializer_class = HypoClusterSerializer
 
@@ -30,7 +45,7 @@ class ControlHypoClusterView(generics.UpdateAPIView):
         instance = serializer.save()
 
 
-class MonitorHypoClusterView(generics.RetrieveAPIView):
+class ClusterMonitorView(generics.RetrieveAPIView):
     queryset = HypoCluster.objects.all()
     serializer_class = HypoClusterSerializer
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Button, Checkbox, IconButton, Menu, MenuItem } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { toast } from 'react-toastify';
 
 const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registrationStatus }) => {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -34,6 +35,21 @@ const ClusterTable = ({ clusters, onRegister, onRowClick, onDelete, registration
   };
 
   const handleMenuItemClick = (action) => {
+    if (action === 'status') {
+      fetch(`http://localhost:8000/api/clusters/status/${menuClusterId}/`, {
+        method: 'GET',
+      })
+        .then(response => {
+          if (response.status === 200) {
+            toast.success('Status retrieved successfully');
+          } else if (response.status === 404) {
+            alert('Cluster not found');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching status:', error);
+        });
+    }
     handleMenuClose();
   };
 

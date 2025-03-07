@@ -29,7 +29,7 @@ const AdminClusterPage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uuid: id }),
+      body: JSON.stringify({ id: id }),
     })
       .then(response => {
         if (response.status === 200) {
@@ -40,6 +40,7 @@ const AdminClusterPage = () => {
             ...prevStatus,
             [id]: 'Registered'
           }));
+          toast.success('Cluster registered successfully', { autoClose: 1000 });
         }
       })
       .catch(error => {

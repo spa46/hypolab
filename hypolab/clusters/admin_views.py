@@ -35,11 +35,9 @@ class InitClusterView(APIView):
         id = request.data.get('id')
 
         try:
-            # cluster = HypoCluster.objects.get(id=id)
-            # cluster.is_registered = True
-            # cluster.save()
-
-            # Create Kafka topic
+            cluster = HypoCluster.objects.get(id=id)
+            cluster.is_registered = True
+            cluster.save()
 
             return Response({"message": "Cluster updated successfully"}, status=status.HTTP_200_OK)
 
