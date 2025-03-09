@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 from django.conf import settings
+from .mqtt_msg_handler import mqtt_message
 
 
 def on_connect(mqtt_client, userdata, flags, rc):
@@ -12,6 +13,7 @@ def on_connect(mqtt_client, userdata, flags, rc):
 
 def on_message(mqtt_client, userdata, msg):
     print(f'Received message on topic: {msg.topic} with payload: {msg.payload}')
+    mqtt_message(msg.topic, msg.payload.decode())
 
 
 client = mqtt.Client()
