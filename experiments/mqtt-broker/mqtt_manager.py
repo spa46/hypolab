@@ -12,6 +12,6 @@ client.on_message = on_message
 client.connect(BROKER, PORT, 60)
 
 # 모든 클라이언트의 상태를 모니터링
-client.subscribe("clients/+/status", qos=1)
+client.subscribe("clusters/+/connections", qos=1)
 
 client.loop_forever()
