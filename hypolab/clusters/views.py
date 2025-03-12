@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from .models import HypoCluster
 from .serializers import HypoClusterSerializer
 import paho.mqtt.client as mqtt
-from .mqtt import client as mqtt_client
+from .mqtt import client
 
 
 class RegisterHypoClusterView(generics.CreateAPIView):
@@ -21,10 +21,10 @@ class ClusterStatusView(generics.RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         cluster_id = kwargs.get('id')
-        topic = f"/dev/{cluster_id}/status"
-        topic = 'abc'
+        topic = f"clusters/{cluster_id}/status"
 
-        result = mqtt_client.publish(topic, "Status request received")
+        result = client.publish(topic, '')
+        print(f'[MQTT] {topic} publish status')
 
         if result.rc != mqtt.MQTT_ERR_SUCCESS:
             return Response({"error": "Failed to publish MQTT message"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -55,5 +55,5 @@ class ClusterMonitorView(generics.RetrieveAPIView):
 
 def publish_message(request):
     request_data = json.loads(request.body)
-    rc, mid = mqtt_client.publish(request_data['topic'], request_data['msg'])
+    rc, mid = client.publish(request_data['topic'], request_data['msg'])
     return JsonResponse({'code': rc})
