@@ -12,28 +12,28 @@ def mqtt_message(topic, payload):
 def handle_status_message(cluster_id, payload):
     from .models import HypoCluster  # Import inside the function
 
-    try:
-        cluster = HypoCluster.objects.get(id=cluster_id)
-        if payload == 'connected':
-            cluster.is_connected = True
-        elif payload == 'disconnected':
-            cluster.is_connected = False
-        cluster.save()
-
-        # Send WebSocket message
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            "cluster_status",
-            {
-                "type": "cluster_status_update",
-                "message": {
-                    "id": cluster_id,
-                    "is_connected": cluster.is_connected,
-                },
-            },
-        )
-    except HypoCluster.DoesNotExist:
-        print(f'Cluster with id {cluster_id} does not exist')
+    # try:
+    #     cluster = HypoCluster.objects.get(id=cluster_id)
+    #     if payload == 'connected':
+    #         cluster.is_connected = True
+    #     elif payload == 'disconnected':
+    #         cluster.is_connected = False
+    #     cluster.save()
+    #
+    #     # Send WebSocket message
+    #     channel_layer = get_channel_layer()
+    #     async_to_sync(channel_layer.group_send)(
+    #         "cluster_status",
+    #         {
+    #             "type": "cluster_status_update",
+    #             "message": {
+    #                 "id": cluster_id,
+    #                 "is_connected": cluster.is_connected,
+    #             },
+    #         },
+    #     )
+    # except HypoCluster.DoesNotExist:
+    #     print(f'Cluster with id {cluster_id} does not exist')
 
 def handle_control_message(cluster_id, payload):
     # Handle control messages
